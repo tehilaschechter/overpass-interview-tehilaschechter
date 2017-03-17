@@ -1,6 +1,10 @@
-#JavaScript Code Test
-##Automated Parking Garage
+#JavaScript Code Test - Automated Parking Garage
 
+#IMPORTANT INSTRUCTIONS
+
+- You have been given access to this repository, please commit as you would normally do with any other project.
+- Please start by creating a branch and work off that branch. Please do not commit to master.
+- When you are finished with the code test, please create a pull request for this project and inform the HR person at overpass you are in touch with. 
 
 ###Summary
  A nearby Parking Garage requires the help of an engineer to display a day's worth of transactions in a data table.
@@ -50,5 +54,5 @@ The JSON Model is available by making a http request to `http://localhost:4200/a
 ###Extra Credit
 
 - Provide unit tests for the code you write.
-- The system should be configured to run promotions where parking is free for other durations, this would mean updating the event code to also randomly add in promotion codes to some car entries
+- The system should be configured to run promotions where parking is free for other durations, this would mean updating the event code to also randomly add in promotion codes to some car entries, and display the resulting pricing in the output
 
