@@ -37,7 +37,8 @@ Here is an example in Markdown of how the table should be organized.
 
 ###Focus
 
-We are primarily looking at how you solve the problem architecturally. You may use any framework or library, however vanilla JavaScript is highly recommended since we take that into account during our code review, so use it sparingly.
+We are primarily looking at how you solve the problem architecturally. You may use any library, however vanilla JavaScript is highly recommended since we take that into account during our code review, so use it sparingly.
+We prefer if you do not use frameworks such as ReactJS, AngularJS, AureliaJS, VueJS, etc...
 
 
 ###Getting Started
