@@ -1,36 +1,50 @@
-function ParkingEntry(){
+function ParkingEntry(license, timeIn, timeOut) {
     this.license = license;
+    this.price = calculatePrice(this.duration);
+    this.duration = calculateDuration(timeIn, timeOut);
     this.timeIn = timeIn;
     this.timeOut = timeOut;
-    this.duration = calculateDuration(timeIn, timeOut);
-    this.price = calculatePrice(this.duration);
 }
 
-function calculateDuration(timeIn, timeOut){
+function calculateDuration(timeIn, timeOut) {
     return timeOut - timeIn;
+    // TODO change to hours
 }
 
-function calculatePrice(duration){
+function calculatePrice(duration) {
     const ratePerHour = 2.99;
     const chargeableTime = duration - 1;
 
     return chargeableTime * ratePerHour;
 }
 
-function initializeParkingEntries(parkingEntryData){
+function initializeParkingEntries(parkingEntryData) {
     var parkingEntries = [];
-    for (let entry of parkingEntryData){
-        parkingEntries.push(new ParkingEntry(JSON.parse(entry)))
+    var parkingData = JSON.parse(parkingEntryData);
+
+    for (let entry of parkingData) {
+        parkingEntries.push(new ParkingEntry(entry.license, entry.in, entry.out))
     }
+    return parkingEntries;
+}
+
+// Set up array to access fields in order
+// Can't use Object.entries() because will be in wrong order. Need to maintain order so calcuations can be made
+function getParkingEntryFields(parkingEntryObject) {
+    return [Object.values(parkingEntryObject)[Object.values(parkingEntryObject).indexOf('license')],
+            Object.values(parkingEntryObject)[Object.values(parkingEntryObject).indexOf('price')],
+            Object.values(parkingEntryObject)[Object.values(parkingEntryObject).indexOf('duration')],
+            Object.values(parkingEntryObject)[Object.values(parkingEntryObject).indexOf('timeIn')],
+            Object.values(parkingEntryObject)[Object.values(parkingEntryObject).indexOf('timeOut')]];
 }
 
 function generateTableHead(table, data) {
     let thead = table.createTHead();
     let row = thead.insertRow();
-    for (let key of data) {
+    for (let key of getParkingEntryFields(data)) {
         let th = document.createElement("th");
         th.style.border = '1px solid black';
-        let text = document.createTextNode(key);
+        let text = document.createTextNode(key.toUpperCase());
         th.appendChild(text);
         row.appendChild(th);
     }
@@ -72,26 +86,25 @@ function generateTable(table, data) {
     }
 }
 
-function createTable(data){
+function createTable(data) {
     let table = document.querySelector("table");
     let headers = Object.keys(data[0]);
 
-    table.style.width  = '100px';
+    table.style.width = '100px';
     table.style.border = '1px solid black';
 
     generateTable(table, data);
-    //generateTableHead(table, headers); 
+    generateTableHead(table, headers);
 }
 
-function httpGetAsync(url, callback)
-{
+function httpGetAsync(url, callback) {
     var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
-            callback(JSON.parse(xmlHttp.responseText));
-        }    
+    xmlHttp.onreadystatechange = function () {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+            callback(initializeParkingEntries(xmlHttp.responseText));
+        }
     }
-    xmlHttp.open("GET", url, true); // true for asynchronous 
+    xmlHttp.open("GET", url, true);
     xmlHttp.send(null);
 }
 
