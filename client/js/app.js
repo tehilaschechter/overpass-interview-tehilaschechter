@@ -16,8 +16,8 @@ function calculatePrice(durationInHours) {
     const chargeableTime = durationInHours - 1;
 
     let price = chargeableTime * ratePerHour;
-    if(price < 0) return 0;
-    
+    if (price < 0) return 0;
+
     // round to nearest cent, always returning two decimal places for cents
     return (Math.round(price * 100) / 100).toFixed(2);
 }
@@ -44,7 +44,27 @@ function getParkingEntryFields(parkingEntryObject) { // TODO
     Object.values(parkingEntryObject)[Object.values(parkingEntryObject).indexOf('timeOut')]];
 }
 
-function formatDate(date){
+function getParkingEntryValueForFieldIndex(parkingEntryObject, fieldIndex) {
+    switch (fieldIndex) {
+        case 0:
+            return parkingEntryObject.license;
+            break;
+        case 1:
+            return parkingEntryObject.price;
+            break;
+        case 2:
+            return parkingEntryObject.duration;
+            break;
+        case 3:
+            return formatDate(parkingEntryObject.timeIn);
+            break;
+        case 4:
+            return formatDate(parkingEntryObject.timeOut);
+            break;
+    }
+}
+
+function formatDate(date) {
     date = new Date();
 
     // date
@@ -57,12 +77,12 @@ function formatDate(date){
     var hours = date.getHours();
     var minutes = date.getMinutes();
     var seconds = date.getSeconds();
-    var ampm = hours >= 12 ? 'pm' : 'am';
+    var ampm = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12;
     hours = hours ? hours : 12; // change the hour '0' to '12'
-    minutes = minutes < 10 ? '0'+ minutes : minutes;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
     var strTime = hours + ':' + minutes + ':' + seconds + " " + ampm;
-    
+
     return month + '/' + day + '/' + year + " " + strTime;
 }
 
@@ -79,49 +99,30 @@ function generateTableHead(table, data) {
     }
 }
 
-function generateTable(table, data) {
+function handleNotCharged(price, row) {
+    if (price == 0) row.style.backgroundColor = '#4682B4';
+}
+
+function handleOvertime(durationInHours, row) {
+    if (durationInHours >= 24) row.style.color = 'ff0000';
+}
+
+function generateTableBody(table, data) {
     const fields = getParkingEntryFields(Object.keys(data[0]));
 
     for (let entry of data) {
         let row = table.insertRow();
-        /*for (key in entry) {
+
+        handleNotCharged(entry.price, row);
+        handleOvertime(entry.duration, row);
+
+        for (let i = 0; i < fields.length; i++) {
             let cell = row.insertCell();
             cell.style.border = '1px solid black';
-            let text = document.createTextNode(entry[key]);
+            let text = document.createTextNode(getParkingEntryValueForFieldIndex(entry, i));
             cell.appendChild(text);
-        }*/
-        
-        /*for (field in fields) {
-            let cell = row.insertCell();
-            cell.style.border = '1px solid black';
-            let text = document.createTextNode(entry[field]);
-            cell.appendChild(text);
-        }*/
+        }
 
-        let licenseCell = row.insertCell();
-        licenseCell.style.border = '1px solid black';
-        let licenseText = document.createTextNode(entry.license);
-        licenseCell.appendChild(licenseText);
-
-        let priceCell = row.insertCell();
-        priceCell.style.border = '1px solid black';
-        let priceText = document.createTextNode(entry.price);
-        priceCell.appendChild(priceText);
-
-        let durationCell = row.insertCell();
-        durationCell.style.border = '1px solid black';
-        let durationText = document.createTextNode(entry.duration);
-        durationCell.appendChild(durationText);
-
-        let timeInCell = row.insertCell();
-        timeInCell.style.border = '1px solid black';
-        let timeInText = document.createTextNode(formatDate(entry.timeIn));
-        timeInCell.appendChild(timeInText);
-
-        let timeOutCell = row.insertCell();
-        timeOutCell.style.border = '1px solid black';
-        let timeOutText = document.createTextNode(formatDate(entry.timeOut));
-        timeOutCell.appendChild(timeOutText);
     }
 }
 
@@ -132,7 +133,7 @@ function createTable(data) {
     table.style.width = '100px';
     table.style.border = '1px solid black';
 
-    generateTable(table, data);
+    generateTableBody(table, data);
     generateTableHead(table, headers);
 }
 
