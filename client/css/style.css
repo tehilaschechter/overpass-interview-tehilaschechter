@@ -31,7 +31,25 @@ body {
      color:#040404;
      background: #FFF;
 }
-
+h1 {
+     font-size: 30px;
+     font-weight: bold;
+     padding: 10px;
+}
+h2{
+     font-size: 30px;
+     font-weight: bold;
+     padding: 20px;   
+}
+th, td {
+     padding: 15px;
+     text-align: left;
+     border: '1px solid black';
+}
+th {
+     background-color: black;
+     color: white;}
+tr:nth-child(even) {background-color: wheat;}
 
 /******************************************
 /* LAYOUT

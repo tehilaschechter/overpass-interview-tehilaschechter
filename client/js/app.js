@@ -92,7 +92,6 @@ function generateTableHead(table, data) {
     let keys = getParkingEntryFields(data);
     for (let key of keys) {
         let th = document.createElement("th");
-        th.style.border = '1px solid black';
         let text = document.createTextNode(key.toUpperCase());
         th.appendChild(text);
         row.appendChild(th);
