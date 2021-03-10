@@ -6,7 +6,6 @@ function ParkingEntry(license, timeIn, timeOut) {
     this.timeOut = timeOut;
     this.duration = calculateDurationInHours(timeIn, timeOut);
     this.price = calculatePriceWithPromotions(this.duration);
-    
 }
 
 function calculateDurationInHours(timeIn, timeOut) {
@@ -14,8 +13,9 @@ function calculateDurationInHours(timeIn, timeOut) {
     return Math.round(durationInHours * 100) / 100;
 }
 
+// Randomly choose amount of extra time for free parking - skewed for no promotion
 function promotionTime(){
-    const promotionArray = [0, 0, 0, 0, 2, 2, 2, 2, 3]
+    const promotionArray = [0, 0, 0, 0, 2, 2, 3]
     return randomElement = promotionArray[Math.floor(Math.random() * promotionArray.length)];
 }
 
@@ -41,11 +41,9 @@ function calculatePriceWithPromotions(durationInHours){
 function initializeParkingEntries(parkingEntryData) {
     var parkingEntries = [];
     var parkingData = JSON.parse(parkingEntryData);
-    console.log(parkingData)
 
     // sort in descending order of the time the car exited the garage
-    parkingData.sort((a, b) => parseInt(b.timeOut) - parseInt(a.timeOut))
-    console.log(parkingData)
+    parkingData.sort((a, b) => parseInt(b.out) - parseInt(a.out))
     for (let entry of parkingData) {
         parkingEntries.push(new ParkingEntry(entry.license, entry.in, entry.out))
     }
@@ -84,8 +82,8 @@ function formatDate(dateString) {
 
     // date
     var year = date.getFullYear();
-    var month = (1 + date.getMonth()).toString();
-    var day = date.getDate().toString();
+    var month = (1 + date.getMonth());
+    var day = date.getDate();
     day = day.length > 1 ? day : '0' + day;
 
     // time
