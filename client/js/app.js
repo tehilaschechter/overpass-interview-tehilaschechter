@@ -66,7 +66,8 @@ function getParkingEntryFields(parkingEntryObject) { // TODO
     Object.values(parkingEntryObject)[Object.values(parkingEntryObject).indexOf('timeOut')]];
 }
 
-// Flip side of previous function - 
+// Flip side of previous function - instead of returning all fields, only returns the necessary field
+// TODO: I think there should be a more efficient way of obtainint a reference to the field, but haven't been able to find one
 function getParkingEntryValueForFieldIndex(parkingEntryObject, fieldIndex) {
     switch (fieldIndex) {
         case 0:
@@ -85,8 +86,7 @@ function getParkingEntryValueForFieldIndex(parkingEntryObject, fieldIndex) {
 }
 
 function formatDate(dateString) {
-    //let date = new Date(dateString);
-    let date = new Date(1615369401342);
+    let date = new Date(dateString);
 
     // date
     var year = date.getFullYear();
@@ -104,8 +104,7 @@ function formatDate(dateString) {
     minutes = minutes < 10 ? '0' + minutes : minutes;
     seconds = seconds < 10 ? '0' + seconds : seconds;
     
-    return month + '/' + day + '/' + year + " " + hours + ':' + minutes + ':' + seconds + " " + ampm;
-    
+    return month + '/' + day + '/' + year + " " + hours + ':' + minutes + ':' + seconds + " " + ampm; 
 }
 
 function generateTableHead(table, data) {
@@ -121,8 +120,8 @@ function generateTableHead(table, data) {
 }
 
 function handlePromotionColor(price, durationInHours, row) {
-    if (price == 0) row.style.backgroundColor = '#4682B4'
-    else if(price != calculateBasePrice(durationInHours)) row.style.backgroundColor = '#ffff00'
+    if (price == 0) row.style.backgroundColor = '#4682B4' // blue for entries less than an hour
+    else if(price != calculateBasePrice(durationInHours)) row.style.backgroundColor = '#ffff00' // yellow for entries with other promos applied
 }
 
 function handleOvertime(durationInHours, row) {
