@@ -48,8 +48,8 @@ th, td {
 }
 th {
      background-color: black;
-     color: white;}
-tr:nth-child(even) {background-color: wheat;}
+     color: white;
+}
 
 /******************************************
 /* LAYOUT

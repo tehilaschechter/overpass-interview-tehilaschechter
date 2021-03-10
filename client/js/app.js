@@ -14,7 +14,7 @@ function calculateDurationInHours(timeIn, timeOut) {
 }
 
 // Randomly choose amount of extra time for free parking - skewed for no promotion
-function promotionTime(){
+function promotionTime() {
     const promotionArray = [0, 0, 0, 0, 1, 1, 2]
     return randomElement = promotionArray[Math.floor(Math.random() * promotionArray.length)];
 }
@@ -31,13 +31,13 @@ function calculateBasePrice(durationInHours) {
     return (Math.round(price * 100) / 100).toFixed(2);
 }
 
-function calculatePriceWithPromotions(durationInHours){
+function calculatePriceWithPromotions(durationInHours) {
     let price = calculateBasePrice(durationInHours);
     const additionalFreeParkingTime = promotionTime(); // determine if the user gets any additional hours free
-    
-    if(additionalFreeParkingTime <= durationInHours){
+
+    if (additionalFreeParkingTime <= durationInHours) {
         price -= (additionalFreeParkingTime * RATE_PER_HOUR);
-    } 
+    }
 
     // needs to be in both functions so they can compare perfectly
     if (price < 0) return 0;
@@ -81,7 +81,7 @@ function getParkingEntryValueForFieldIndex(parkingEntryObject, fieldIndex) {
         case 4:
             return formatDate(parkingEntryObject.timeOut);
         default:
-            return "error";    
+            return "error";
     }
 }
 
@@ -103,8 +103,8 @@ function formatDate(dateString) {
     hours = hours ? hours : 12; // change the hour '0' to '12'
     minutes = minutes < 10 ? '0' + minutes : minutes;
     seconds = seconds < 10 ? '0' + seconds : seconds;
-    
-    return month + '/' + day + '/' + year + " " + hours + ':' + minutes + ':' + seconds + " " + ampm; 
+
+    return month + '/' + day + '/' + year + " " + hours + ':' + minutes + ':' + seconds + " " + ampm;
 }
 
 function generateTableHead(table, data) {
@@ -120,8 +120,9 @@ function generateTableHead(table, data) {
 }
 
 function handlePromotionColor(price, durationInHours, row) {
-    if (price == 0) row.style.backgroundColor = '#4682B4' // blue for entries less than an hour
-    else if(price != calculateBasePrice(durationInHours)) row.style.backgroundColor = '#ffff00' // yellow for entries with other promos applied
+    if (durationInHours <= 1) row.style.backgroundColor = '#4682B4' // blue for entries less than an hour
+    // yellow for entries with other promos applied (i.e. more than an hour but didn't pay full price)
+    else if (price != calculateBasePrice(durationInHours)) row.style.backgroundColor = '#ffff00'
 }
 
 function handleOvertime(durationInHours, row) {
